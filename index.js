@@ -55,7 +55,7 @@ async function ocrTohtml(yourMath) {
 }
 
 async function ocrtextTopng(str) {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         var eng = '';
         var math = '';
         var start = false;
@@ -71,7 +71,7 @@ async function ocrtextTopng(str) {
             } else if (start == true && char == "`") {
                 //ascii text ended
                 start = false;
-                result = result + await ocrTohtml(math);
+                result = result +await ocrTohtml(math);
                 //resultmath=resultmath+math;
                 math = "";
             }
