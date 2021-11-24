@@ -18,13 +18,12 @@ async function htmltopngconverter(htmltext) {
         await page.screenshot({
             path: FileName
         });
-        
         await browser.close();
         resolve(FileName);
     })
 }
 
-async function ocrToPng(yourMath) {
+async function ocrTohtml(yourMath) {
 
     return new Promise((resolve, reject) => {
         mjAPI.config({
@@ -56,37 +55,42 @@ async function ocrToPng(yourMath) {
 }
 
 async function ocrtextTopng(str) {
-    var eng = '';
-    var math = '';
-    var start = false;
-    var result = '';
-    for (let i = 0; i < str.length; i++) {
-        const char = str[i];
-        if (start == false && char == "`") {
-            //ascii text started
-            start = true;
-            result += eng;
-            eng = "";
+    return new Promise((resolve, reject) => {
+        var eng = '';
+        var math = '';
+        var start = false;
+        var result = '';
+        for (let i = 0; i < str.length; i++) {
+            const char = str[i];
+            if (start == false && char == "`") {
+                //ascii text started
+                start = true;
+                result += eng;
+                eng = "";
 
-        } else if (start == true && char == "`") {
-            //ascii text ended
-            start = false;
-            result = result + await ocrToPng(math);
-            //resultmath=resultmath+math;
-            math = "";
-        }
+            } else if (start == true && char == "`") {
+                //ascii text ended
+                start = false;
+                result = result + await ocrTohtml(math);
+                //resultmath=resultmath+math;
+                math = "";
+            }
 
-        if (start == true && char != "`") {
-            math = math + char;
-        } else if (start == false && char != "`") {
-            eng = eng + char;
+            if (start == true && char != "`") {
+                math = math + char;
+            } else if (start == false && char != "`") {
+                eng = eng + char;
+            }
         }
-    }
-    console.log("eng  " + result);
+        //resolve(result);
+        const rest = await htmltopngconverter(result);
+        resolve(rest);
+    })
+    //console.log("eng  " + result);
 }
 
 module.exports = {
-    ocrToPng,
+    ocrTohtml,
     htmltopngconverter,
     ocrtextTopng
 };
