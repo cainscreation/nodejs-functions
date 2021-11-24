@@ -55,7 +55,7 @@ async function ocrToPng(yourMath) {
     })
 }
 
-async function texttoHtml() {
+async function ocrtextTopng(str) {
     var eng = '';
     var math = '';
     var start = false;
@@ -88,5 +88,5 @@ async function texttoHtml() {
 module.exports = {
     ocrToPng,
     htmltopngconverter,
-    texttoHtml
+    ocrtextTopng
 };
